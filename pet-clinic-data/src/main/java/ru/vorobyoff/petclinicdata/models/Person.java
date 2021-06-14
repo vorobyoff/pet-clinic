@@ -3,7 +3,7 @@ package ru.vorobyoff.petclinicdata.models;
 import static java.util.Objects.requireNonNull;
 import static org.springframework.util.StringUtils.capitalize;
 
-public class Person {
+public class Person extends BaseEntity {
 
     private String firstName;
     private String lastName;

@@ -6,7 +6,7 @@ import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
-public class Pet {
+public class Pet extends BaseEntity {
 
     private Owner owner;
     private PetType type;
@@ -47,8 +47,7 @@ public class Pet {
         this.birthDate = birthDate;
     }
 
-    public enum PetType {
-        ;
+    public static class PetType {
         private String name;
 
         PetType(final String name) {
