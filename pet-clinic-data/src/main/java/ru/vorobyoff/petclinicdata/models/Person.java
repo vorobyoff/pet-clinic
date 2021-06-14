@@ -15,6 +15,9 @@ public class Person {
         this.lastName = capitalize(lastName);
     }
 
+    protected Person() {
+    }
+
     public String getFirstName() {
         return firstName;
     }

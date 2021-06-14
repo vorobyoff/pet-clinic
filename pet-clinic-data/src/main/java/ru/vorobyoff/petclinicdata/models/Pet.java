@@ -19,7 +19,7 @@ public class Pet {
         this.birthDate = birthDate;
     }
 
-    public Pet() {
+    protected Pet() {
     }
 
     public Owner getOwner() {
