@@ -47,7 +47,7 @@ public class Pet extends BaseEntity {
         this.birthDate = birthDate;
     }
 
-    public static class PetType {
+    public static class PetType extends BaseEntity {
         private String name;
 
         PetType(final String name) {
