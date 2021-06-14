@@ -1,4 +1,4 @@
-package ru.vorobyoff.petclinic.models;
+package ru.vorobyoff.petclinicdata.models;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -48,7 +48,8 @@ public class Pet {
     }
 
     public enum PetType {
-        ;private String name;
+        ;
+        private String name;
 
         PetType(final String name) {
             requireNonNull(name, "Parameter 'name' must not be null.");

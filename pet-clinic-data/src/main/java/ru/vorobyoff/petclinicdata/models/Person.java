@@ -1,4 +1,4 @@
-package ru.vorobyoff.petclinic.models;
+package ru.vorobyoff.petclinicdata.models;
 
 import static java.util.Objects.requireNonNull;
 import static org.springframework.util.StringUtils.capitalize;

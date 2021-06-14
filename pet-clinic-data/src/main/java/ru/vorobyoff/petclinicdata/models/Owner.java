@@ -1,4 +1,4 @@
-package ru.vorobyoff.petclinic.models;
+package ru.vorobyoff.petclinicdata.models;
 
 public class Owner extends Person {
 
