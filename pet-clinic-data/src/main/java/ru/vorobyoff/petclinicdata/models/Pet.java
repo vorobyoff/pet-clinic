@@ -48,6 +48,7 @@ public class Pet extends BaseEntity {
     }
 
     public static class PetType extends BaseEntity {
+
         private String name;
 
         PetType(final String name) {

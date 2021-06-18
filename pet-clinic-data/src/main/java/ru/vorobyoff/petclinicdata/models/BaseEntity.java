@@ -8,7 +8,7 @@ public class BaseEntity implements Serializable {
 
     private Long id;
 
-    public BaseEntity(Long id) {
+    public BaseEntity(final Long id) {
         requireNonNull(id, "Parameter 'id' must not be null.");
         this.id = id;
     }
