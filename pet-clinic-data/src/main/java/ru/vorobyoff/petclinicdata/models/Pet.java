@@ -51,7 +51,7 @@ public class Pet extends BaseEntity {
 
         private String name;
 
-        PetType(final String name) {
+        public PetType(final String name) {
             requireNonNull(name, "Parameter 'name' must not be null.");
             this.name = name;
         }
