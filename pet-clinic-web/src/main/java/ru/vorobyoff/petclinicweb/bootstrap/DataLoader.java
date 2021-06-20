@@ -6,8 +6,6 @@ import ru.vorobyoff.petclinicdata.models.Owner;
 import ru.vorobyoff.petclinicdata.models.Vet;
 import ru.vorobyoff.petclinicdata.services.OwnerService;
 import ru.vorobyoff.petclinicdata.services.VetService;
-import ru.vorobyoff.petclinicdata.services.map.OwnerServiceMapImpl;
-import ru.vorobyoff.petclinicdata.services.map.VetServiceMapImpl;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -15,9 +13,9 @@ public class DataLoader implements CommandLineRunner {
     private final OwnerService ownerService;
     private final VetService vetService;
 
-    public DataLoader() {
-        ownerService = new OwnerServiceMapImpl();
-        vetService = new VetServiceMapImpl();
+    public DataLoader(final OwnerService ownerService, final VetService vetService) {
+        this.ownerService = ownerService;
+        this.vetService = vetService;
     }
 
     @Override
@@ -28,7 +26,6 @@ public class DataLoader implements CommandLineRunner {
         ownerService.save(fiona);
 
         System.out.println("Loaded Owners....");
-
 
         final var sam = new Vet("Sam", "Axe");
         vetService.save(sam);
