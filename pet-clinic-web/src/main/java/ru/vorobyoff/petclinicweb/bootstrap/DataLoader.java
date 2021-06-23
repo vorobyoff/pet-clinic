@@ -27,9 +27,9 @@ public class DataLoader implements CommandLineRunner {
 
         System.out.println("Loaded Owners....");
 
-        final var sam = new Vet("Sam", "Axe");
+        final var sam = new Vet("Sam", "Axe", null);
         vetService.save(sam);
-        Vet jessie = new Vet("Jessie", "Porter");
+        Vet jessie = new Vet("Jessie", "Porter", null);
         vetService.save(jessie);
 
         System.out.println("Loaded Vets....");
