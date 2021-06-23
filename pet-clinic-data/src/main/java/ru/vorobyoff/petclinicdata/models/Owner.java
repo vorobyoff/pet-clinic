@@ -4,21 +4,40 @@ import java.util.List;
 
 public class Owner extends Person {
 
+    private String address;
+    private String city;
+    private String phone;
     private List<Pet> pets;
 
-    public Owner(final String firstName, final String lastName, final List<Pet> pets) {
-        super(firstName, lastName);
-        this.pets = pets;
+    public String getAddress() {
+        return address;
     }
 
-    protected Owner() {
+    public void setAddress(final String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(final String city) {
+        this.city = city;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(final String phone) {
+        this.phone = phone;
     }
 
     public List<Pet> getPets() {
         return pets;
     }
 
-    public void setPets(List<Pet> pets) {
+    public void setPets(final List<Pet> pets) {
         this.pets = pets;
     }
 }

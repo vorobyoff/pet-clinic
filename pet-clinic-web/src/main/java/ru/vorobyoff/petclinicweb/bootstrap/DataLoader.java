@@ -20,16 +20,26 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        final var michael = new Owner("Michael", "Weston", null);
+        final var michael = new Owner();
+        michael.setFirstName("Michael");
+        michael.setLastName("Wetson");
         ownerService.save(michael);
-        final var fiona = new Owner("Fiona", "Glenanne", null);
+
+        final var fiona = new Owner();
+        fiona.setFirstName("Fiona");
+        fiona.setLastName("Glenanne");
         ownerService.save(fiona);
 
         System.out.println("Loaded Owners....");
 
-        final var sam = new Vet("Sam", "Axe", null);
+        final var sam = new Vet();
+        sam.setFirstName("Sam");
+        sam.setLastName("Axe");
         vetService.save(sam);
-        Vet jessie = new Vet("Jessie", "Porter", null);
+
+        final var jessie = new Vet();
+        jessie.setFirstName("Jessie");
+        jessie.setLastName("Porter");
         vetService.save(jessie);
 
         System.out.println("Loaded Vets....");
