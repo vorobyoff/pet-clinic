@@ -1,5 +1,6 @@
 package ru.vorobyoff.petclinicdata.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Owner extends Person {
@@ -7,7 +8,7 @@ public class Owner extends Person {
     private String address;
     private String city;
     private String phone;
-    private List<Pet> pets;
+    private List<Pet> pets = new ArrayList<>();
 
     public String getAddress() {
         return address;
@@ -39,5 +40,9 @@ public class Owner extends Person {
 
     public void setPets(final List<Pet> pets) {
         this.pets = pets;
+    }
+
+    public void addPet(final Pet pet) {
+        pets.add(pet);
     }
 }

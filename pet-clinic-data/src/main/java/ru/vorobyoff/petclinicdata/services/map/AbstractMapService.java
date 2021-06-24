@@ -34,7 +34,8 @@ public abstract class AbstractMapService<T extends BaseEntity, ID extends Long> 
     public T save(final T obj) {
         if (obj != null && obj.getId() == null) {
             obj.setId(generateNextId());
-            return storage.put(obj.getId(), obj);
+            storage.put(obj.getId(), obj);
+            return obj;
         } else throw new IllegalArgumentException("Object cannot be null.");
     }
 
@@ -42,7 +43,6 @@ public abstract class AbstractMapService<T extends BaseEntity, ID extends Long> 
         try {
             return max(storage.keySet()) + 1;
         } catch (final NoSuchElementException e) {
-            e.printStackTrace();
             return 1L;
         }
     }

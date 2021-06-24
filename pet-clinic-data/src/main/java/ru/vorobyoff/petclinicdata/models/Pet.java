@@ -1,15 +1,21 @@
 package ru.vorobyoff.petclinicdata.models;
 
 import java.time.LocalDate;
-import java.util.Optional;
-
-import static java.util.Optional.ofNullable;
 
 public class Pet extends BaseEntity {
 
+    private String name;
     private Owner owner;
     private PetType type;
     private LocalDate birthDate;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
 
     public Owner getOwner() {
         return owner;
@@ -19,16 +25,16 @@ public class Pet extends BaseEntity {
         this.owner = owner;
     }
 
-    public Optional<PetType> getType() {
-        return ofNullable(type);
+    public PetType getType() {
+        return type;
     }
 
     public void setType(final PetType type) {
         this.type = type;
     }
 
-    public Optional<LocalDate> getBirthDate() {
-        return ofNullable(birthDate);
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
     public void setBirthDate(final LocalDate birthDate) {
