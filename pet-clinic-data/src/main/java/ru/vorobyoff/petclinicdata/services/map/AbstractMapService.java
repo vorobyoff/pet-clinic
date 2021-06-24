@@ -39,12 +39,11 @@ public abstract class AbstractMapService<T extends BaseEntity, ID extends Long> 
     }
 
     private Long generateNextId() {
-        var next = 1L;
         try {
-            next = max(storage.keySet()) + 1;
-        } catch (final NoSuchElementException ignored) {
+            return max(storage.keySet()) + 1;
+        } catch (final NoSuchElementException e) {
+            e.printStackTrace();
+            return 1L;
         }
-
-        return next;
     }
 }
