@@ -1,17 +1,21 @@
 package ru.vorobyoff.petclinicdata.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Vet extends Person {
 
-    private List<Speciality> specialities = new ArrayList<>();
+    private Set<Speciality> specialities = new HashSet<>();
 
-    public List<Speciality> getSpecialities() {
+    public Set<Speciality> getSpecialities() {
         return specialities;
     }
 
-    public void setSpecialities(final List<Speciality> specialities) {
+    public void setSpecialities(final Set<Speciality> specialities) {
         this.specialities = specialities;
+    }
+
+    public void addSpeciality(final Speciality speciality) {
+        specialities.add(speciality);
     }
 }

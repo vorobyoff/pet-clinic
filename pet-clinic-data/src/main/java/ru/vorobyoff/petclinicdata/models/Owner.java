@@ -42,7 +42,7 @@ public class Owner extends Person {
         this.pets = pets;
     }
 
-    public void addPet(final Pet pet) {
+    public void tameAnimal(final Pet pet) {
         pets.add(pet);
     }
 }
