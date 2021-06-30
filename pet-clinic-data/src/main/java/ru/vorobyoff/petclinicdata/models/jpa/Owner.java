@@ -1,14 +1,37 @@
-package ru.vorobyoff.petclinicdata.models;
+package ru.vorobyoff.petclinicdata.models.jpa;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
+
+@Entity
+@Table(name = "owner")
 public class Owner extends Person {
 
+    @Column(name = "address")
     private String address;
+    @Column(name = "city")
     private String city;
+    @Column(name = "phone")
     private String phone;
+    @OneToMany(mappedBy = "owner", cascade = ALL)
     private List<Pet> pets = new ArrayList<>();
+
+    public Owner(final Long id, final String firstName, final String lastName, final String address, final String city, final String phone, final List<Pet> pets) {
+        super(id, firstName, lastName);
+        this.address = address;
+        this.city = city;
+        this.phone = phone;
+        this.pets = pets;
+    }
+
+    protected Owner() {
+    }
 
     public String getAddress() {
         return address;
@@ -40,9 +63,5 @@ public class Owner extends Person {
 
     public void setPets(final List<Pet> pets) {
         this.pets = pets;
-    }
-
-    public void tameAnimal(final Pet pet) {
-        pets.add(pet);
     }
 }
