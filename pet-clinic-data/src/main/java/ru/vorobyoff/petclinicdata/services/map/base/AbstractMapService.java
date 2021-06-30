@@ -1,6 +1,6 @@
-package ru.vorobyoff.petclinicdata.services.map;
+package ru.vorobyoff.petclinicdata.services.map.base;
 
-import ru.vorobyoff.petclinicdata.models.BaseEntity;
+import ru.vorobyoff.petclinicdata.models.map.BaseEntity;
 
 import java.util.Collection;
 import java.util.HashMap;

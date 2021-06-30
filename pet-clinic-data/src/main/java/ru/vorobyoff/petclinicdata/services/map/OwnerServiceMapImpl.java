@@ -1,12 +1,13 @@
 package ru.vorobyoff.petclinicdata.services.map;
 
 import org.springframework.stereotype.Service;
-import ru.vorobyoff.petclinicdata.models.Owner;
-import ru.vorobyoff.petclinicdata.models.Pet;
-import ru.vorobyoff.petclinicdata.models.PetType;
-import ru.vorobyoff.petclinicdata.services.OwnerService;
-import ru.vorobyoff.petclinicdata.services.PetService;
-import ru.vorobyoff.petclinicdata.services.PetTypeService;
+import ru.vorobyoff.petclinicdata.models.map.Owner;
+import ru.vorobyoff.petclinicdata.models.map.Pet;
+import ru.vorobyoff.petclinicdata.models.map.PetType;
+import ru.vorobyoff.petclinicdata.services.map.base.AbstractMapService;
+import ru.vorobyoff.petclinicdata.services.map.base.OwnerService;
+import ru.vorobyoff.petclinicdata.services.map.base.PetService;
+import ru.vorobyoff.petclinicdata.services.map.base.PetTypeService;
 
 import java.util.Collection;
 import java.util.List;

@@ -2,15 +2,15 @@ package ru.vorobyoff.petclinicweb.bootstrap;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import ru.vorobyoff.petclinicdata.models.Owner;
-import ru.vorobyoff.petclinicdata.models.Pet;
-import ru.vorobyoff.petclinicdata.models.PetType;
-import ru.vorobyoff.petclinicdata.models.Speciality;
-import ru.vorobyoff.petclinicdata.models.Vet;
-import ru.vorobyoff.petclinicdata.services.OwnerService;
-import ru.vorobyoff.petclinicdata.services.PetTypeService;
-import ru.vorobyoff.petclinicdata.services.SpecialityService;
-import ru.vorobyoff.petclinicdata.services.VetService;
+import ru.vorobyoff.petclinicdata.models.map.Owner;
+import ru.vorobyoff.petclinicdata.models.map.Pet;
+import ru.vorobyoff.petclinicdata.models.map.PetType;
+import ru.vorobyoff.petclinicdata.models.map.Speciality;
+import ru.vorobyoff.petclinicdata.models.map.Vet;
+import ru.vorobyoff.petclinicdata.services.map.base.OwnerService;
+import ru.vorobyoff.petclinicdata.services.map.base.PetTypeService;
+import ru.vorobyoff.petclinicdata.services.map.base.SpecialityService;
+import ru.vorobyoff.petclinicdata.services.map.base.VetService;
 
 import static java.time.LocalDate.now;
 

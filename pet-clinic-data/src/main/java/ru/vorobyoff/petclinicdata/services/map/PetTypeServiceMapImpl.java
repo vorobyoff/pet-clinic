@@ -1,8 +1,9 @@
 package ru.vorobyoff.petclinicdata.services.map;
 
 import org.springframework.stereotype.Service;
-import ru.vorobyoff.petclinicdata.models.PetType;
-import ru.vorobyoff.petclinicdata.services.PetTypeService;
+import ru.vorobyoff.petclinicdata.models.map.PetType;
+import ru.vorobyoff.petclinicdata.services.map.base.AbstractMapService;
+import ru.vorobyoff.petclinicdata.services.map.base.PetTypeService;
 
 import java.util.Collection;
 import java.util.Optional;
