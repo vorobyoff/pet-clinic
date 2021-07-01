@@ -18,12 +18,10 @@ public class Pet extends BaseEntity {
 
     @Column(name = "name")
     private String name;
-    @Column(name = "owner")
-    @JoinColumn(name = "owner_id")
     @ManyToOne
+    @JoinColumn(name = "owner_id")
     private Owner owner;
     @ManyToOne
-    @Column(name = "type")
     @JoinColumn(name = "type_id")
     private PetType type;
     @Column(name = "birthDate")
@@ -40,14 +38,14 @@ public class Pet extends BaseEntity {
         this.visits = visits;
     }
 
-    protected Pet() {
-    }
-
     public Pet(final PetType type, final LocalDate birthDate, final String name) {
         super(null);
         this.name = name;
         this.type = type;
         this.birthDate = birthDate;
+    }
+
+    protected Pet() {
     }
 
     public String getName() {

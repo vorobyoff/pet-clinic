@@ -23,12 +23,12 @@ public class Speciality extends BaseEntity {
         this.vets = vets;
     }
 
-    protected Speciality() {
-    }
-
     public Speciality(final String description) {
         super(null);
         this.description = description;
+    }
+
+    protected Speciality() {
     }
 
     public String getDescription() {
@@ -45,5 +45,9 @@ public class Speciality extends BaseEntity {
 
     public void setVets(final Set<Vet> vets) {
         this.vets = vets;
+    }
+
+    public void addVet(final Vet vet) {
+        vets.add(vet);
     }
 }

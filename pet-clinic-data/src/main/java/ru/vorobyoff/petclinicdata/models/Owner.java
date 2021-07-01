@@ -30,6 +30,8 @@ public class Owner extends Person {
         this.pets = pets;
     }
 
+    @Deprecated
+    // Using only for JPA
     protected Owner() {
     }
 

@@ -18,7 +18,7 @@ public class Vet extends Person {
     @ManyToMany(fetch = EAGER)
     @Column(name = "specilities")
     @JoinTable(name = "vet_speciality", joinColumns = @JoinColumn(name = "vet_id"),
-            inverseJoinColumns = @JoinColumn(name = "specility_id"))
+            inverseJoinColumns = @JoinColumn(name = "speciality_id"))
     private Set<Speciality> specialities = new HashSet<>();
 
     public Vet(final Long id, final String firstName, final String lastName, final Set<Speciality> specialities) {
@@ -26,11 +26,13 @@ public class Vet extends Person {
         this.specialities = specialities;
     }
 
-    protected Vet() {
-    }
-
     public Vet(final String firstName, final String lastName) {
         super(null, firstName, lastName);
+    }
+
+    @Deprecated
+    // Using only for JPA
+    protected Vet() {
     }
 
     public Set<Speciality> getSpecialities() {
@@ -42,7 +44,7 @@ public class Vet extends Person {
     }
 
     public Vet setSpeciality(final Speciality speciality) {
-        speciality.getVets().add(this);
+        speciality.addVet(this);
         specialities.add(speciality);
         return this;
     }
