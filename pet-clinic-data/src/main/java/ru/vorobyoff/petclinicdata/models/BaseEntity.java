@@ -1,4 +1,4 @@
-package ru.vorobyoff.petclinicdata.models.jpa;
+package ru.vorobyoff.petclinicdata.models;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

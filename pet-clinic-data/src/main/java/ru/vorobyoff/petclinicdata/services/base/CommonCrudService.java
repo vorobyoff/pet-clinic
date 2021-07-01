@@ -1,9 +1,11 @@
-package ru.vorobyoff.petclinicdata.services;
+package ru.vorobyoff.petclinicdata.services.base;
+
+import ru.vorobyoff.petclinicdata.models.BaseEntity;
 
 import java.util.Collection;
 import java.util.Optional;
 
-public interface CommonCrudService<T, ID> {
+public interface CommonCrudService<T extends BaseEntity, ID extends Long> {
 
     T save(final T obj);
 

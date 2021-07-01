@@ -1,7 +1,7 @@
 package ru.vorobyoff.petclinicdata.repositories;
 
 import org.springframework.data.repository.CrudRepository;
-import ru.vorobyoff.petclinicdata.models.jpa.Pet;
+import ru.vorobyoff.petclinicdata.models.PetType;
 
-public interface PetTypeRepository extends CrudRepository<Pet, Long> {
+public interface PetTypeRepository extends CrudRepository<PetType, Long> {
 }

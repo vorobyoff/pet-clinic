@@ -1,4 +1,4 @@
-package ru.vorobyoff.petclinicdata.models.jpa;
+package ru.vorobyoff.petclinicdata.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +29,10 @@ public class Vet extends Person {
     protected Vet() {
     }
 
+    public Vet(final String firstName, final String lastName) {
+        super(null, firstName, lastName);
+    }
+
     public Set<Speciality> getSpecialities() {
         return specialities;
     }
@@ -37,7 +41,9 @@ public class Vet extends Person {
         this.specialities = specialities;
     }
 
-    public void addSpeciality(final Speciality speciality) {
+    public Vet setSpeciality(final Speciality speciality) {
+        speciality.getVets().add(this);
         specialities.add(speciality);
+        return this;
     }
 }

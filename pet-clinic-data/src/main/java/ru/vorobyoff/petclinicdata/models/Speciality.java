@@ -1,4 +1,4 @@
-package ru.vorobyoff.petclinicdata.models.jpa;
+package ru.vorobyoff.petclinicdata.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +24,11 @@ public class Speciality extends BaseEntity {
     }
 
     protected Speciality() {
+    }
+
+    public Speciality(final String description) {
+        super(null);
+        this.description = description;
     }
 
     public String getDescription() {

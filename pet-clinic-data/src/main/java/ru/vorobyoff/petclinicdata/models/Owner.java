@@ -1,4 +1,4 @@
-package ru.vorobyoff.petclinicdata.models.jpa;
+package ru.vorobyoff.petclinicdata.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +33,13 @@ public class Owner extends Person {
     protected Owner() {
     }
 
+    public Owner(final String firstName, final String lastName, final String address, final String city, final String phone) {
+        super(null, firstName, lastName);
+        this.address = address;
+        this.city = city;
+        this.phone = phone;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -63,5 +70,11 @@ public class Owner extends Person {
 
     public void setPets(final List<Pet> pets) {
         this.pets = pets;
+    }
+
+    public Owner tamePet(final Pet pet) {
+        pet.setOwner(this);
+        pets.add(pet);
+        return this;
     }
 }

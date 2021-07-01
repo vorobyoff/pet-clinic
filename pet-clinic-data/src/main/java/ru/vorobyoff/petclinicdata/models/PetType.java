@@ -1,4 +1,4 @@
-package ru.vorobyoff.petclinicdata.models.jpa;
+package ru.vorobyoff.petclinicdata.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +13,11 @@ public class PetType extends BaseEntity {
 
     public PetType(final Long id, final String name) {
         super(id);
+        this.name = name;
+    }
+
+    public PetType(final String name) {
+        super(null);
         this.name = name;
     }
 

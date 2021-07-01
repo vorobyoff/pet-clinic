@@ -1,4 +1,4 @@
-package ru.vorobyoff.petclinicdata.models.jpa;
+package ru.vorobyoff.petclinicdata.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +28,13 @@ public class Visit extends BaseEntity {
     }
 
     protected Visit() {
+    }
+
+    public Visit(final Pet pet, final LocalDateTime date, final String description) {
+        super(null);
+        this.date = date;
+        this.description = description;
+        this.pet = pet;
     }
 
     public LocalDateTime getDate() {

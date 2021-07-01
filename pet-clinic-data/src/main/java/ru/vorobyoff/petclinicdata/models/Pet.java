@@ -1,4 +1,4 @@
-package ru.vorobyoff.petclinicdata.models.jpa;
+package ru.vorobyoff.petclinicdata.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +20,7 @@ public class Pet extends BaseEntity {
     private String name;
     @Column(name = "owner")
     @JoinColumn(name = "owner_id")
-    @ManyToOne(targetEntity = Owner.class)
+    @ManyToOne
     private Owner owner;
     @ManyToOne
     @Column(name = "type")
@@ -41,6 +41,13 @@ public class Pet extends BaseEntity {
     }
 
     protected Pet() {
+    }
+
+    public Pet(final PetType type, final LocalDate birthDate, final String name) {
+        super(null);
+        this.name = name;
+        this.type = type;
+        this.birthDate = birthDate;
     }
 
     public String getName() {

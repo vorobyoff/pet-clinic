@@ -3,7 +3,7 @@ package ru.vorobyoff.petclinicweb.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.vorobyoff.petclinicdata.services.map.base.OwnerService;
+import ru.vorobyoff.petclinicdata.services.base.OwnerService;
 
 @Controller
 @RequestMapping("/owners")

@@ -2,96 +2,90 @@ package ru.vorobyoff.petclinicweb.bootstrap;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import ru.vorobyoff.petclinicdata.models.map.Owner;
-import ru.vorobyoff.petclinicdata.models.map.Pet;
-import ru.vorobyoff.petclinicdata.models.map.PetType;
-import ru.vorobyoff.petclinicdata.models.map.Speciality;
-import ru.vorobyoff.petclinicdata.models.map.Vet;
-import ru.vorobyoff.petclinicdata.services.map.base.OwnerService;
-import ru.vorobyoff.petclinicdata.services.map.base.PetTypeService;
-import ru.vorobyoff.petclinicdata.services.map.base.SpecialityService;
-import ru.vorobyoff.petclinicdata.services.map.base.VetService;
+import ru.vorobyoff.petclinicdata.models.Owner;
+import ru.vorobyoff.petclinicdata.models.Pet;
+import ru.vorobyoff.petclinicdata.models.PetType;
+import ru.vorobyoff.petclinicdata.models.Speciality;
+import ru.vorobyoff.petclinicdata.models.Vet;
+import ru.vorobyoff.petclinicdata.models.Visit;
+import ru.vorobyoff.petclinicdata.services.base.OwnerService;
+import ru.vorobyoff.petclinicdata.services.base.PetTypeService;
+import ru.vorobyoff.petclinicdata.services.base.SpecialityService;
+import ru.vorobyoff.petclinicdata.services.base.VetService;
+import ru.vorobyoff.petclinicdata.services.base.VisitService;
 
-import static java.time.LocalDate.now;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Component
 public class DataLoader implements CommandLineRunner {
 
-    private final SpecialityService specialityService;
+    private final SpecialityService specialtyService;
     private final PetTypeService petTypeService;
+    private final VisitService visitService;
     private final OwnerService ownerService;
     private final VetService vetService;
 
-    public DataLoader(final SpecialityService specialityService, final PetTypeService petTypeService, final OwnerService ownerService, final VetService vetService) {
-        this.specialityService = specialityService;
+    public DataLoader(final SpecialityService specialtyService, final PetTypeService petTypeService,
+                      final VisitService visitService, final OwnerService ownerService,
+                      final VetService vetService) {
+        this.specialtyService = specialtyService;
         this.petTypeService = petTypeService;
+        this.visitService = visitService;
         this.ownerService = ownerService;
         this.vetService = vetService;
     }
 
     @Override
-    public void run(String... args) {
-        final var dogType = new PetType();
-        dogType.setName("Dog");
-        final var savedDogPetType = petTypeService.save(dogType);
+    public void run(String... args) throws Exception {
+        int count = petTypeService.findAll().size();
+        if (count == 0) loadData();
+    }
 
-        final var catType = new PetType();
-        catType.setName("Cat");
-        var savedCatPetType = petTypeService.save(catType);
+    private void loadData() {
+        final var dog = new PetType("Dog");
+        final var savedDogPetType = petTypeService.save(dog);
 
-        final var michael = new Owner();
-        michael.setFirstName("Michael");
-        michael.setLastName("Weston");
-        michael.setAddress("123 SomeStreet");
-        michael.setCity("SomeCity");
-        michael.setPhone("0123456789");
+        final var cat = new PetType("Cat");
+        final var savedCatPetType = petTypeService.save(cat);
 
-        final var dog = new Pet();
-        dog.setType(savedDogPetType);
-        dog.setBirthDate(now());
-        dog.setOwner(michael);
-        dog.setName("Dogge");
+        final var radiology = new Speciality("Radiology");
+        final var savedRadiology = specialtyService.save(radiology);
 
-        michael.tameAnimal(dog);
-        ownerService.save(michael);
+        final var surgery = new Speciality("Surgery");
+        final var savedSurgery = specialtyService.save(surgery);
 
-        final var fiona = new Owner();
-        fiona.setFirstName("Fiona");
-        fiona.setLastName("Glenanne");
-        fiona.setAddress("123 SomeStreet");
-        fiona.setCity("SomeCity");
-        fiona.setPhone("1234567890");
+        final var owner1 = new Owner("Michael", "Weston", "123 Brickerel", "Miami", "1231231234");
 
-        final var cat = new Pet();
-        cat.setType(savedCatPetType);
-        cat.setBirthDate(now());
-        cat.setOwner(fiona);
-        cat.setName("Tom");
+        final var mikesPet = new Pet(savedDogPetType, LocalDate.now(), "Rosco");
 
-        fiona.tameAnimal(cat);
-        ownerService.save(fiona);
+        owner1.tamePet(mikesPet);
+
+        ownerService.save(owner1);
+
+        final var owner2 = new Owner("Fiona", "Glenanne", "123 Brickerel", "Miami", "1231231234");
+
+        final var fionasCat = new Pet(savedCatPetType, LocalDate.now(), "Just Cat");
+
+        owner2.tamePet(fionasCat);
+
+        ownerService.save(owner2);
+
+        final var catVisit = new Visit(fionasCat, LocalDateTime.now(), "Sneezy Kitty");
+
+        visitService.save(catVisit);
 
         System.out.println("Loaded Owners....");
 
-        final var radiology = new Speciality();
-        radiology.setDescription("Radiology");
-        final var savedRadiology = specialityService.save(radiology);
+        Vet vet1 = new Vet("Sam", "Axe");
+        vet1.setSpeciality(savedRadiology);
 
-        final var surgery = new Speciality();
-        surgery.setDescription("Surgery");
-        final var savedSurgery = specialityService.save(surgery);
+        vetService.save(vet1);
 
-        final var sam = new Vet();
-        sam.setFirstName("Sam");
-        sam.setLastName("Axe");
-        sam.addSpeciality(savedRadiology);
-        vetService.save(sam);
+        Vet vet2 = new Vet("Jessie", "Porter");
+        vet2.setSpeciality(savedSurgery);
 
-        final var jessie = new Vet();
-        jessie.setFirstName("Jessie");
-        jessie.setLastName("Porter");
-        jessie.addSpeciality(savedSurgery);
-        vetService.save(jessie);
+        vetService.save(vet2);
 
         System.out.println("Loaded Vets....");
     }
