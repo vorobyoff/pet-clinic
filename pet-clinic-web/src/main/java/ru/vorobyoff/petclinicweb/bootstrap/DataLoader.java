@@ -17,6 +17,8 @@ import ru.vorobyoff.petclinicdata.services.base.VisitService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static java.time.LocalDate.now;
+
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -57,7 +59,7 @@ public class DataLoader implements CommandLineRunner {
 
         final var owner1 = new Owner("Michael", "Weston", "123 Brickerel", "Miami", "1231231234");
 
-        final var mikesPet = new Pet(savedDogPetType, LocalDate.now(), "Rosco");
+        final var mikesPet = new Pet("Rosco", savedDogPetType, LocalDate.now());
 
         owner1.tamePet(mikesPet);
 
@@ -65,13 +67,13 @@ public class DataLoader implements CommandLineRunner {
 
         final var owner2 = new Owner("Fiona", "Glenanne", "123 Brickerel", "Miami", "1231231234");
 
-        final var fionasCat = new Pet(savedCatPetType, LocalDate.now(), "Just Cat");
+        final var fionasCat = new Pet("Just Cat", savedCatPetType, now());
 
         owner2.tamePet(fionasCat);
 
         ownerService.save(owner2);
 
-        final var catVisit = new Visit(fionasCat, LocalDateTime.now(), "Sneezy Kitty");
+        final var catVisit = new Visit(LocalDateTime.now(), "Sneezy Kitty", fionasCat);
 
         visitService.save(catVisit);
 

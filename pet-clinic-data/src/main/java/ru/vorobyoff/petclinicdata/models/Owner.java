@@ -1,5 +1,11 @@
 package ru.vorobyoff.petclinicdata.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -8,75 +14,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
+import static lombok.AccessLevel.PROTECTED;
+import static org.springframework.util.StringUtils.capitalize;
 
 @Entity
 @Table(name = "owner")
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(onConstructor_ = @Deprecated, access = PROTECTED)
 public class Owner extends Person {
 
     @Column(name = "address")
     private String address;
     @Column(name = "city")
     private String city;
+    @Setter
     @Column(name = "phone")
     private String phone;
+    @Setter
     @OneToMany(mappedBy = "owner", cascade = ALL)
     private List<Pet> pets = new ArrayList<>();
 
-    public Owner(final Long id, final String firstName, final String lastName, final String address, final String city, final String phone, final List<Pet> pets) {
-        super(id, firstName, lastName);
-        this.address = address;
-        this.city = city;
-        this.phone = phone;
-        this.pets = pets;
-    }
-
-    @Deprecated
-    // Using only for JPA
-    protected Owner() {
-    }
-
-    public Owner(final String firstName, final String lastName, final String address, final String city, final String phone) {
-        super(null, firstName, lastName);
-        this.address = address;
-        this.city = city;
+    public Owner(final String firstName, final String lastName, final String address,
+                 final String city, final String phone) {
+        super(firstName, lastName);
+        setAddress(address);
+        setCity(city);
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
+    public void tamePet(final Pet pet) {
+        pet.setOwner(this);
+        pets.add(pet);
     }
 
     public void setAddress(final String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
+        this.address = capitalize(address);
     }
 
     public void setCity(final String city) {
-        this.city = city;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(final String phone) {
-        this.phone = phone;
-    }
-
-    public List<Pet> getPets() {
-        return pets;
-    }
-
-    public void setPets(final List<Pet> pets) {
-        this.pets = pets;
-    }
-
-    public Owner tamePet(final Pet pet) {
-        pet.setOwner(this);
-        pets.add(pet);
-        return this;
+        this.city = capitalize(city);
     }
 }
