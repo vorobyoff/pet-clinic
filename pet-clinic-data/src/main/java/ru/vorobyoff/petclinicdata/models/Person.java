@@ -1,11 +1,17 @@
 package ru.vorobyoff.petclinicdata.models;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
+import static lombok.AccessLevel.PROTECTED;
 import static org.springframework.util.StringUtils.capitalize;
 
 @MappedSuperclass
+@Getter
+@NoArgsConstructor(onConstructor_ = @Deprecated, access = PROTECTED)
 public class Person extends BaseEntity {
 
     @Column(name = "first_name")
@@ -13,25 +19,13 @@ public class Person extends BaseEntity {
     @Column(name = "last_name")
     private String lastName;
 
-    public Person(final Long id, final String firstName, final String lastName) {
-        super(id);
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    protected Person() {
-    }
-
-    public String getFirstName() {
-        return firstName;
+    public Person(final String firstName, final String lastName) {
+        setFirstName(firstName);
+        setLastName(lastName);
     }
 
     public void setFirstName(final String firstName) {
         this.firstName = capitalize(firstName);
-    }
-
-    public String getLastName() {
-        return lastName;
     }
 
     public void setLastName(final String lastName) {

@@ -1,5 +1,11 @@
 package ru.vorobyoff.petclinicdata.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -10,9 +16,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static javax.persistence.FetchType.EAGER;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Table(name = "vet")
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(onConstructor_ = @Deprecated, access = PROTECTED)
 public class Vet extends Person {
 
     @ManyToMany(fetch = EAGER)
@@ -21,31 +33,12 @@ public class Vet extends Person {
             inverseJoinColumns = @JoinColumn(name = "speciality_id"))
     private Set<Speciality> specialities = new HashSet<>();
 
-    public Vet(final Long id, final String firstName, final String lastName, final Set<Speciality> specialities) {
-        super(id, firstName, lastName);
-        this.specialities = specialities;
-    }
-
     public Vet(final String firstName, final String lastName) {
-        super(null, firstName, lastName);
+        super(firstName, lastName);
     }
 
-    @Deprecated
-    // Using only for JPA
-    protected Vet() {
-    }
-
-    public Set<Speciality> getSpecialities() {
-        return specialities;
-    }
-
-    public void setSpecialities(final Set<Speciality> specialities) {
-        this.specialities = specialities;
-    }
-
-    public Vet setSpeciality(final Speciality speciality) {
+    public void setSpeciality(final Speciality speciality) {
         speciality.addVet(this);
         specialities.add(speciality);
-        return this;
     }
 }
