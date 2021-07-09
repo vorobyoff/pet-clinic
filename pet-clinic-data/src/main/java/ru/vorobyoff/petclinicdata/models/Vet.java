@@ -28,12 +28,12 @@ public class Vet extends Person {
     @Column(name = "specilities")
     @JoinTable(name = "vet_speciality", joinColumns = @JoinColumn(name = "vet_id"),
             inverseJoinColumns = @JoinColumn(name = "speciality_id"))
-    private Set<Speciality> specialities = new HashSet<>();
+    private Set<Speciality> specialities;
 
     @Builder
     public Vet(final Long id, final String firstName, final String lastName, final Set<Speciality> specialities) {
         super(id, firstName, lastName);
-        this.specialities = specialities;
+        this.specialities = specialities == null ? new HashSet<>() : specialities;
     }
 
     public void setSpeciality(final Speciality speciality) {

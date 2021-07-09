@@ -1,5 +1,6 @@
 package ru.vorobyoff.petclinicweb.bootstrap;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ru.vorobyoff.petclinicdata.models.Owner;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 
 import static java.time.LocalDate.now;
 
+@Slf4j
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -51,44 +53,78 @@ public class DataLoader implements CommandLineRunner {
         final var cat = new PetType("Cat");
         final var savedCatPetType = petTypeService.save(cat);
 
-        final var radiology = new Speciality("Radiology");
+        log.info("Pet type have been saved.");
+
+        final var radiology = Speciality.builder().description("Radiology").build();
         final var savedRadiology = specialtyService.save(radiology);
 
-        final var surgery = new Speciality("Surgery");
+        final var surgery = Speciality.builder().description("Surgery").build();
         final var savedSurgery = specialtyService.save(surgery);
 
-        final var owner1 = new Owner("Michael", "Weston", "123 Brickerel", "Miami", "1231231234");
+        log.info("Specialities have been saved.");
 
-        final var mikesPet = new Pet("Rosco", savedDogPetType, LocalDate.now());
+        final var michael = Owner.builder()
+                .address("123 Brickerel")
+                .firstName("Michael")
+                .lastName("Weston")
+                .phone("1231231234")
+                .city("Miami")
+                .build();
 
-        owner1.tamePet(mikesPet);
+        final var mikesPet = Pet.builder()
+                .birthDate(LocalDate.now())
+                .type(savedDogPetType)
+                .name("Rosco")
+                .build();
 
-        ownerService.save(owner1);
+        michael.tamePet(mikesPet);
 
-        final var owner2 = new Owner("Fiona", "Glenanne", "123 Brickerel", "Miami", "1231231234");
+        ownerService.save(michael);
 
-        final var fionasCat = new Pet("Just Cat", savedCatPetType, now());
+        final var fiona = Owner.builder()
+                .address("123 Brickerel")
+                .lastName("Glenanne")
+                .firstName("Fiona")
+                .phone("1231231234")
+                .city("Miami")
+                .build();
 
-        owner2.tamePet(fionasCat);
+        final var fionasCat = Pet.builder()
+                .type(savedCatPetType)
+                .birthDate(now())
+                .name("Just Cat")
+                .build();
 
-        ownerService.save(owner2);
+        fiona.tamePet(fionasCat);
+
+        ownerService.save(fiona);
+
+        log.info("Owners have been saved.");
 
         final var catVisit = new Visit(LocalDateTime.now(), "Sneezy Kitty", fionasCat);
 
         visitService.save(catVisit);
 
-        System.out.println("Loaded Owners....");
+        log.info("Visit has been saved.");
 
-        Vet vet1 = new Vet("Sam", "Axe");
-        vet1.setSpeciality(savedRadiology);
+        final var sam = Vet.builder()
+                .firstName("Sam")
+                .lastName("Axe")
+                .build();
 
-        vetService.save(vet1);
+        sam.setSpeciality(savedRadiology);
 
-        Vet vet2 = new Vet("Jessie", "Porter");
-        vet2.setSpeciality(savedSurgery);
+        vetService.save(sam);
 
-        vetService.save(vet2);
+        final var jessie = Vet.builder()
+                .firstName("Jessie")
+                .lastName("Porter")
+                .build();
 
-        System.out.println("Loaded Vets....");
+        jessie.setSpeciality(savedSurgery);
+
+        vetService.save(jessie);
+
+        log.info("Vets have been saved.");
     }
 }

@@ -29,7 +29,7 @@ public class Owner extends Person {
     @Column(name = "phone")
     private String phone;
     @OneToMany(mappedBy = "owner", cascade = ALL)
-    private List<Pet> pets = new ArrayList<>();
+    private List<Pet> pets;
 
     @Builder
     public Owner(final Long id, final String firstName, final String lastName, final String address,
@@ -38,7 +38,7 @@ public class Owner extends Person {
         this.address = address;
         this.city = city;
         this.phone = phone;
-        this.pets = pets;
+        this.pets = pets == null ? new ArrayList<>() : pets;
     }
 
     public void tamePet(final Pet pet) {

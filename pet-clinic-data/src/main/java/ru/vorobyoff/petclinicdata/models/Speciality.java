@@ -1,6 +1,5 @@
 package ru.vorobyoff.petclinicdata.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +18,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "speciality")
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(onConstructor_ = @Deprecated, access = PROTECTED)
 public class Speciality extends BaseEntity {
 
@@ -28,7 +25,14 @@ public class Speciality extends BaseEntity {
     private String description;
     @Column(name = "vets")
     @ManyToMany(mappedBy = "specialities")
-    private Set<Vet> vets = new HashSet<>();
+    private Set<Vet> vets;
+
+    @Builder
+    public Speciality(final Long id, final String description, final Set<Vet> vets) {
+        super(id);
+        this.description = description;
+        this.vets = vets == null ? new HashSet<>() : vets;
+    }
 
     public void addVet(final Vet vet) {
         vets.add(vet);
