@@ -1,5 +1,6 @@
 package ru.vorobyoff.petclinicdata.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 @MappedSuperclass
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor(onConstructor_ = @Deprecated, access = PROTECTED)
 public class BaseEntity implements Serializable {
 

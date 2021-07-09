@@ -1,6 +1,5 @@
 package ru.vorobyoff.petclinicdata.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +21,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "vet")
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(onConstructor_ = @Deprecated, access = PROTECTED)
 public class Vet extends Person {
 
@@ -33,8 +30,10 @@ public class Vet extends Person {
             inverseJoinColumns = @JoinColumn(name = "speciality_id"))
     private Set<Speciality> specialities = new HashSet<>();
 
-    public Vet(final String firstName, final String lastName) {
-        super(firstName, lastName);
+    @Builder
+    public Vet(final Long id, final String firstName, final String lastName, final Set<Speciality> specialities) {
+        super(id, firstName, lastName);
+        this.specialities = specialities;
     }
 
     public void setSpeciality(final Speciality speciality) {

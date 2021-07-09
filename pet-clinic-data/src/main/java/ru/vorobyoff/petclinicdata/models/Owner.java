@@ -1,6 +1,5 @@
 package ru.vorobyoff.petclinicdata.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,13 +14,11 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
-import static org.springframework.util.StringUtils.capitalize;
 
 @Entity
 @Table(name = "owner")
 @Getter
-@Builder
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor(onConstructor_ = @Deprecated, access = PROTECTED)
 public class Owner extends Person {
 
@@ -29,31 +26,23 @@ public class Owner extends Person {
     private String address;
     @Column(name = "city")
     private String city;
-    @Setter
     @Column(name = "phone")
     private String phone;
-    @Setter
     @OneToMany(mappedBy = "owner", cascade = ALL)
     private List<Pet> pets = new ArrayList<>();
 
-    public Owner(final String firstName, final String lastName, final String address,
-                 final String city, final String phone) {
-        super(firstName, lastName);
-        setAddress(address);
-        setCity(city);
+    @Builder
+    public Owner(final Long id, final String firstName, final String lastName, final String address,
+                 final String city, final String phone, final List<Pet> pets) {
+        super(id, firstName, lastName);
+        this.address = address;
+        this.city = city;
         this.phone = phone;
+        this.pets = pets;
     }
 
     public void tamePet(final Pet pet) {
         pet.setOwner(this);
         pets.add(pet);
-    }
-
-    public void setAddress(final String address) {
-        this.address = capitalize(address);
-    }
-
-    public void setCity(final String city) {
-        this.city = capitalize(city);
     }
 }
