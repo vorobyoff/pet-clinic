@@ -4,7 +4,7 @@ jobs:
   test:
     parallelism: 2
     docker:
-      - image: circleci/openjdk:stretch
+      - image: cimg/openjdk:11.0
 
     steps:
       - checkout
@@ -29,10 +29,8 @@ jobs:
 
   build:
     docker:
-      - image: circleci/openjdk:stretch
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+      - image: cimg/openjdk:11.0
+
     steps:
       - checkout
       - restore_cache:
