@@ -7,4 +7,6 @@ import java.util.List;
 public interface OwnerService extends CommonCrudService<Owner, Long> {
 
     List<Owner> findByLastName(final String lastName);
+
+    List<Owner> findAllByLastname(final String lastname);
 }

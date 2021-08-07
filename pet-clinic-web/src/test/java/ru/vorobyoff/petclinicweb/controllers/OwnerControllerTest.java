@@ -9,12 +9,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.vorobyoff.petclinicdata.models.Owner;
 import ru.vorobyoff.petclinicdata.services.base.OwnerService;
 
+import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -46,20 +49,61 @@ class OwnerControllerTest {
     }
 
     @Test
-    void index() throws Exception {
-        when(service.findAll()).thenReturn(singletonList(testOwner));
-        mockMvc.perform(get("/owners"))
-                .andExpect(model().attribute("owners", hasSize(1)))
-                .andExpect(view().name("owners/index"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     void showOwnerDetailsByOwnerId() throws Exception {
         when(service.findById(anyLong())).thenReturn(Optional.of(testOwner));
         mockMvc.perform(get("/owners/{ownerId}", TEST_ID))
                 .andExpect(model().attribute("owner", hasProperty("id", is(TEST_ID))))
                 .andExpect(view().name("/owners/owner-details"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void showFindOwnersForm() throws Exception {
+        mockMvc.perform(get("/owners/find"))
+                .andExpect(view().name("owners/find-owners"))
+                .andExpect(model().attributeExists("owner"))
+                .andExpect(status().isOk());
+
+        verifyNoInteractions(service);
+    }
+
+    @Test
+    void showFoundOwner() throws Exception {
+        when(service.findAllByLastname(anyString())).thenReturn(singletonList(testOwner));
+
+        mockMvc.perform(get("/owners/"))
+                .andExpect(redirectedUrl("/owners/" + TEST_ID))
+                .andExpect(status().is3xxRedirection());
+
+        verify(service).findAllByLastname(anyString());
+    }
+
+    @Test
+    void showFoundOwners() throws Exception {
+        final var additionalOwner = Owner.builder()
+                .lastName(TEST_SURNAME)
+                .firstName(TEST_NAME)
+                .id(TEST_ID)
+                .build();
+
+        when(service.findAllByLastname(anyString())).thenReturn(List.of(testOwner, additionalOwner));
+
+        mockMvc.perform(get("/owners/"))
+                .andExpect(view().name("owners/owner-list"))
+                .andExpect(model().attributeExists("owners"))
+                .andExpect(status().isOk());
+
+        verify(service).findAllByLastname(anyString());
+    }
+
+    @Test
+    void ownersNotFoundCase() throws Exception {
+        when(service.findAllByLastname(anyString())).thenReturn(emptyList());
+
+        mockMvc.perform(get("/owners/"))
+                .andExpect(view().name("owners/find-owners"))
+                .andExpect(status().isOk());
+
+        verify(service).findAllByLastname(anyString());
     }
 }

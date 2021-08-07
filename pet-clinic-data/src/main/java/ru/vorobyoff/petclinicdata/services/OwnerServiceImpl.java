@@ -10,6 +10,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
+import static org.springframework.data.util.StreamUtils.createStreamFromIterator;
+
 @Service
 public class OwnerServiceImpl implements OwnerService {
 
@@ -43,6 +46,12 @@ public class OwnerServiceImpl implements OwnerService {
         repository.findOwnersByLastName(lastName).iterator()
                 .forEachRemaining(owners::add);
         return owners;
+    }
+
+    @Override
+    public List<Owner> findAllByLastname(final String lastname) {
+        final var ownerIterator = repository.findAllByLastNameLike(lastname).iterator();
+        return createStreamFromIterator(ownerIterator).collect(toList());
     }
 
     @Override
