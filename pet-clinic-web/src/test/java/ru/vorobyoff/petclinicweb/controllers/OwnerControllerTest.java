@@ -20,6 +20,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
@@ -105,5 +106,26 @@ class OwnerControllerTest {
                 .andExpect(status().isOk());
 
         verify(service).findAllByLastname(anyString());
+    }
+
+    @Test
+    void showOwnerForm() throws Exception {
+        mockMvc.perform(get("/owners/new"))
+                .andExpect(view().name("owners/owner-form"))
+                .andExpect(model().attributeExists("owner"))
+                .andExpect(status().isOk());
+
+        verifyNoInteractions(service);
+    }
+
+    @Test
+    void processOwnerForm() throws Exception {
+        when(service.save(any())).thenReturn(testOwner);
+
+        mockMvc.perform(post("/owners/new"))
+                .andExpect(redirectedUrl("/owners/" + TEST_ID))
+                .andExpect(status().is3xxRedirection());
+
+        verify(service).save(any());
     }
 }

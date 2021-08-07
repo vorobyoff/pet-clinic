@@ -3,8 +3,10 @@ package ru.vorobyoff.petclinicweb.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ru.vorobyoff.petclinicdata.models.Owner;
@@ -64,5 +66,34 @@ public class OwnerController {
     private String getViewNameIfMultipleOwnersExist(final List<Owner> owners, final Model model) {
         model.addAttribute("owners", owners);
         return "owners/owner-list";
+    }
+
+    @GetMapping("new")
+    public String showCreateOwnerForm(final Model model) {
+        model.addAttribute("owner", Owner.builder().build());
+        return "owners/owner-form";
+    }
+
+    @PostMapping("new")
+    public String processCreateOwnerForm(@Validated final Owner owner, final BindingResult result) {
+        if (result.hasErrors()) return "owners/owner-form";
+        final var saved = ownerService.save(owner);
+        return "redirect:/owners/" + saved.getId();
+    }
+
+    @GetMapping("/{ownerId}/edit")
+    public String showUpdateOwnerForm(final @PathVariable Long ownerId, final Model model) {
+        final var owner = ownerService.findById(ownerId).orElseThrow();
+        model.addAttribute(owner);
+        return "owners/owner-form";
+    }
+
+    @PostMapping("/{ownerId}/edit")
+    public String processUpdateOwnerForm(@Validated final Owner owner, final @PathVariable Long ownerId, final BindingResult result) {
+        if (result.hasErrors()) return "owners/owner-form";
+
+        owner.setId(ownerId);
+        final var saved = ownerService.save(owner);
+        return "redirect:/owners/" + saved.getId();
     }
 }
