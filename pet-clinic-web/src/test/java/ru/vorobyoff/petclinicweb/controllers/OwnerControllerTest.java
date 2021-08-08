@@ -10,7 +10,6 @@ import ru.vorobyoff.petclinicdata.models.Owner;
 import ru.vorobyoff.petclinicdata.services.base.OwnerService;
 
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -51,7 +50,7 @@ class OwnerControllerTest {
 
     @Test
     void showOwnerDetailsByOwnerId() throws Exception {
-        when(service.findById(anyLong())).thenReturn(Optional.of(testOwner));
+        when(service.findById(anyLong())).thenReturn(testOwner);
         mockMvc.perform(get("/owners/{ownerId}", TEST_ID))
                 .andExpect(model().attribute("owner", hasProperty("id", is(TEST_ID))))
                 .andExpect(view().name("/owners/owner-details"))
@@ -70,13 +69,13 @@ class OwnerControllerTest {
 
     @Test
     void showFoundOwner() throws Exception {
-        when(service.findAllByLastname(anyString())).thenReturn(singletonList(testOwner));
+        when(service.findAllByLastName(anyString())).thenReturn(singletonList(testOwner));
 
         mockMvc.perform(get("/owners/"))
                 .andExpect(redirectedUrl("/owners/" + TEST_ID))
                 .andExpect(status().is3xxRedirection());
 
-        verify(service).findAllByLastname(anyString());
+        verify(service).findAllByLastName(anyString());
     }
 
     @Test
@@ -87,25 +86,25 @@ class OwnerControllerTest {
                 .id(TEST_ID)
                 .build();
 
-        when(service.findAllByLastname(anyString())).thenReturn(List.of(testOwner, additionalOwner));
+        when(service.findAllByLastName(anyString())).thenReturn(List.of(testOwner, additionalOwner));
 
         mockMvc.perform(get("/owners/"))
                 .andExpect(view().name("owners/owner-list"))
                 .andExpect(model().attributeExists("owners"))
                 .andExpect(status().isOk());
 
-        verify(service).findAllByLastname(anyString());
+        verify(service).findAllByLastName(anyString());
     }
 
     @Test
     void ownersNotFoundCase() throws Exception {
-        when(service.findAllByLastname(anyString())).thenReturn(emptyList());
+        when(service.findAllByLastName(anyString())).thenReturn(emptyList());
 
         mockMvc.perform(get("/owners/"))
                 .andExpect(view().name("owners/find-owners"))
                 .andExpect(status().isOk());
 
-        verify(service).findAllByLastname(anyString());
+        verify(service).findAllByLastName(anyString());
     }
 
     @Test

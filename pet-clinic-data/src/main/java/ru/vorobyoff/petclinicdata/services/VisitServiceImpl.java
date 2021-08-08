@@ -1,47 +1,46 @@
 package ru.vorobyoff.petclinicdata.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.vorobyoff.petclinicdata.models.Visit;
 import ru.vorobyoff.petclinicdata.repositories.VisitRepository;
 import ru.vorobyoff.petclinicdata.services.base.VisitService;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
+import static org.springframework.data.util.StreamUtils.createStreamFromIterator;
 
 @Service
-public class VisitServiceImpl implements VisitService {
+@RequiredArgsConstructor
+public final class VisitServiceImpl implements VisitService {
 
-    private final VisitRepository repository;
-
-    public VisitServiceImpl(final VisitRepository repository) {
-        this.repository = repository;
-    }
+    private final VisitRepository visitRepository;
 
     @Override
     public Visit save(final Visit obj) {
-        return repository.save(obj);
+        return visitRepository.save(obj);
     }
 
     @Override
-    public Collection<Visit> findAll() {
-        final var visits = new ArrayList<Visit>();
-        repository.findAll().iterator().forEachRemaining(visits::add);
-        return visits;
+    public Set<Visit> findAll() {
+        final var visitIterator = visitRepository.findAll().iterator();
+        return createStreamFromIterator(visitIterator).collect(toSet());
     }
 
     @Override
-    public Optional<Visit> findById(final Long id) {
-        return repository.findById(id);
+    public Visit findById(final Long id) {
+        return visitRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Visit with the given id does not exist."));
     }
 
     @Override
     public void delete(final Visit obj) {
-        repository.delete(obj);
+        visitRepository.delete(obj);
     }
 
     @Override
     public void deleteById(final Long id) {
-        repository.deleteById(id);
+        visitRepository.deleteById(id);
     }
 }

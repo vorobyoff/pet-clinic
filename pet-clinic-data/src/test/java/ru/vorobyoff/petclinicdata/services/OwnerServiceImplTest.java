@@ -24,15 +24,15 @@ class OwnerServiceImplTest {
     private static final Long TEST_ID = 1L;
 
     @Mock
-    private OwnerRepository repository;
-    private OwnerService service;
+    private OwnerRepository ownerRepository;
+    private OwnerService ownerService;
 
     private Owner testOwner;
 
     @BeforeEach
     void setUp() {
         openMocks(this);
-        service = new OwnerServiceImpl(repository);
+        ownerService = new OwnerServiceImpl(ownerRepository);
 
         testOwner = Owner.builder()
                 .lastName(TEST_LAST_NAME)
@@ -43,66 +43,62 @@ class OwnerServiceImplTest {
 
     @Test
     void save() {
-        when(repository.save(any())).thenReturn(testOwner);
+        when(ownerRepository.save(any())).thenReturn(testOwner);
 
-        final var saved = service.save(testOwner);
+        final var saved = ownerService.save(testOwner);
         assertNotNull(saved);
         assertEquals(testOwner.getId(), saved.getId());
 
-        verify(repository).save(any());
+        verify(ownerRepository).save(any());
     }
 
     @Test
     void findAll() {
-        when(repository.findAll()).thenReturn(singletonList(testOwner));
+        when(ownerRepository.findAll()).thenReturn(singletonList(testOwner));
 
-        final var foundOwners = service.findAll();
+        final var foundOwners = ownerService.findAll();
         assertNotNull(foundOwners);
         assertEquals(1, foundOwners.size());
 
         final var firstFoundOwner = foundOwners.stream().findFirst()
                 .orElseThrow(() -> new DataProcessingException("Owner does not exist."));
         assertEquals(testOwner.getId(), firstFoundOwner.getId());
-        verify(repository).findAll();
+        verify(ownerRepository).findAll();
     }
 
     @Test
     void findAllNotFoundCase() {
-        when(repository.findAll()).thenReturn(emptyList());
+        when(ownerRepository.findAll()).thenReturn(emptyList());
 
-        final var foundOwners = service.findAll();
+        final var foundOwners = ownerService.findAll();
         assertNotNull(foundOwners);
         assertTrue(foundOwners.isEmpty());
 
-        verify(repository).findAll();
+        verify(ownerRepository).findAll();
     }
 
     @Test
     void findById() {
-        when(repository.findById(anyLong())).thenReturn(of(testOwner));
+        when(ownerRepository.findById(anyLong())).thenReturn(of(testOwner));
 
-        final var foundOwner = service.findById(anyLong())
-                .orElseThrow(() -> new DataProcessingException("Owner with given id doesn't exist."));
+        final var foundOwner = ownerService.findById(anyLong());
         assertEquals(testOwner.getId(), foundOwner.getId());
 
-        verify(repository).findById(anyLong());
+        verify(ownerRepository).findById(anyLong());
     }
 
     @Test
     void findByIdNotFoundCase() {
-        when(repository.findById(anyLong())).thenReturn(empty());
-
-        final var foundOwner = service.findById(anyLong());
-        assertTrue(foundOwner.isEmpty());
-
-        verify(repository).findById(anyLong());
+        when(ownerRepository.findById(anyLong())).thenReturn(empty());
+        assertThrows(IllegalArgumentException.class, () -> ownerService.findById(anyLong()));
+        verify(ownerRepository).findById(anyLong());
     }
 
     @Test
     void findByLastName() {
-        when(repository.findOwnersByLastName(anyString())).thenReturn(singletonList(testOwner));
+        when(ownerRepository.findAllByLastNameLike(anyString())).thenReturn(singletonList(testOwner));
 
-        final var foundOwners = service.findByLastName(anyString());
+        final var foundOwners = ownerService.findAllByLastName(anyString());
         assertNotNull(foundOwners);
         assertFalse(foundOwners.isEmpty());
 
@@ -110,43 +106,43 @@ class OwnerServiceImplTest {
         assertNotNull(firstFoundOwner);
         assertEquals(testOwner.getLastName(), firstFoundOwner.getLastName());
 
-        verify(repository).findOwnersByLastName(anyString());
+        verify(ownerRepository).findAllByLastNameLike(anyString());
     }
 
     @Test
     void findByLastNameNotFoundCase() {
-        when(repository.findOwnersByLastName(anyString())).thenReturn(emptyList());
+        when(ownerRepository.findAllByLastNameLike(anyString())).thenReturn(emptyList());
 
-        final var foundOwners = service.findByLastName(anyString());
+        final var foundOwners = ownerService.findAllByLastName(anyString());
         assertNotNull(foundOwners);
         assertTrue(foundOwners.isEmpty());
 
-        verify(repository).findOwnersByLastName(anyString());
+        verify(ownerRepository).findAllByLastNameLike(anyString());
     }
 
     @Test
     void delete() {
-        service.delete(testOwner);
-        verify(repository).delete(any());
+        ownerService.delete(testOwner);
+        verify(ownerRepository).delete(any());
     }
 
     @Test
     void deleteById() {
-        service.deleteById(testOwner.getId());
-        verify(repository).deleteById(anyLong());
+        ownerService.deleteById(testOwner.getId());
+        verify(ownerRepository).deleteById(anyLong());
     }
 
     @Test
     void findAllByLastNameLike() {
-        when(repository.findAllByLastNameLike(anyString())).thenReturn(singletonList(testOwner));
+        when(ownerRepository.findAllByLastNameLike(anyString())).thenReturn(singletonList(testOwner));
 
-        final var foundOwners = service.findAllByLastname(TEST_LAST_NAME);
+        final var foundOwners = ownerService.findAllByLastName(TEST_LAST_NAME);
         assertNotNull(foundOwners);
         assertFalse(foundOwners.isEmpty());
 
         final var firstFound = foundOwners.stream().findFirst().orElseThrow(RuntimeException::new);
         assertEquals(TEST_LAST_NAME, firstFound.getLastName());
 
-        verify(repository).findAllByLastNameLike(anyString());
+        verify(ownerRepository).findAllByLastNameLike(anyString());
     }
 }

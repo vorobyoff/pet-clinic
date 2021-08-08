@@ -1,48 +1,57 @@
 package ru.vorobyoff.petclinicdata.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.vorobyoff.petclinicdata.models.PetType;
 import ru.vorobyoff.petclinicdata.repositories.PetTypeRepository;
 import ru.vorobyoff.petclinicdata.services.base.PetTypeService;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+import static org.springframework.data.util.StreamUtils.createStreamFromIterator;
 
 @Service
+@RequiredArgsConstructor
 public class PetTypeServiceImpl implements PetTypeService {
 
-    private final PetTypeRepository repository;
+    private final PetTypeRepository petTypeRepository;
 
-    public PetTypeServiceImpl(final PetTypeRepository repository) {
-        this.repository = repository;
+    @Override
+    public final PetType save(final PetType obj) {
+        return petTypeRepository.save(obj);
     }
 
     @Override
-    public PetType save(final PetType obj) {
-        return repository.save(obj);
+    public Set<PetType> findAll() {
+        final var typesIterator = petTypeRepository.findAll().iterator();
+        return createStreamFromIterator(typesIterator).collect(toSet());
     }
 
     @Override
-    public Collection<PetType> findAll() {
-        final var types = new HashSet<PetType>();
-        repository.findAll().iterator()
-                .forEachRemaining(types::add);
-        return types;
+    public final PetType findById(final Long id) {
+        return petTypeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("PetType with the given id does not exist."));
     }
 
     @Override
-    public Optional<PetType> findById(final Long id) {
-        return repository.findById(id);
+    @Transactional
+    public List<String> findAllPetTypesDescriptions() {
+        return findAll().stream()
+                .map(PetType::getName)
+                .collect(toList());
     }
 
     @Override
-    public void delete(final PetType obj) {
-        repository.delete(obj);
+    public final void delete(final PetType obj) {
+        petTypeRepository.delete(obj);
     }
 
     @Override
-    public void deleteById(final Long id) {
-        repository.deleteById(id);
+    public final void deleteById(final Long id) {
+        petTypeRepository.deleteById(id);
     }
 }

@@ -3,17 +3,16 @@ package ru.vorobyoff.petclinicdata.services.base;
 import ru.vorobyoff.petclinicdata.models.BaseEntity;
 
 import java.util.Collection;
-import java.util.Optional;
 
-public interface CommonCrudService<T extends BaseEntity, ID extends Long> {
+public interface CommonCrudService<E extends BaseEntity, I extends Long> {
 
-    T save(final T obj);
+    E save(final E obj);
 
-    Collection<T> findAll();
+    Collection<E> findAll();
 
-    Optional<T> findById(final ID id);
+    E findById(final I i);
 
-    void delete(final T obj);
+    void delete(final E obj);
 
-    void deleteById(final ID id);
+    void deleteById(final I i);
 }

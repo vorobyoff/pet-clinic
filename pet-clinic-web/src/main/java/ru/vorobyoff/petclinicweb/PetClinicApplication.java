@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import static org.springframework.boot.SpringApplication.run;
 
-@SpringBootApplication(scanBasePackages = {"ru.vorobyoff.petclinicdata.services", "ru.vorobyoff.petclinicweb"})
+@SpringBootApplication(scanBasePackages = {"ru.vorobyoff.petclinicdata", "ru.vorobyoff.petclinicweb"})
 @EnableJpaRepositories("ru.vorobyoff.petclinicdata.repositories")
 @EntityScan("ru.vorobyoff.petclinicdata.models")
 public class PetClinicApplication {

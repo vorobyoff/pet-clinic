@@ -1,48 +1,46 @@
 package ru.vorobyoff.petclinicdata.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.vorobyoff.petclinicdata.models.Pet;
 import ru.vorobyoff.petclinicdata.repositories.PetRepository;
 import ru.vorobyoff.petclinicdata.services.base.PetService;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+import static org.springframework.data.util.StreamUtils.createStreamFromIterator;
 
 @Service
-public class PetServiceImpl implements PetService {
+@RequiredArgsConstructor
+public final class PetServiceImpl implements PetService {
 
-    private final PetRepository repository;
-
-    public PetServiceImpl(final PetRepository repository) {
-        this.repository = repository;
-    }
+    private final PetRepository petRepository;
 
     @Override
     public Pet save(final Pet obj) {
-        return repository.save(obj);
+        return petRepository.save(obj);
     }
 
     @Override
-    public Collection<Pet> findAll() {
-        final var pets = new ArrayList<Pet>();
-        repository.findAll().iterator()
-                .forEachRemaining(pets::add);
-        return pets;
+    public List<Pet> findAll() {
+        final var petIterator = petRepository.findAll().iterator();
+        return createStreamFromIterator(petIterator).collect(toList());
     }
 
     @Override
-    public Optional<Pet> findById(final Long id) {
-        return repository.findById(id);
+    public Pet findById(final Long id) {
+        return petRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pet with the given id does not exist."));
     }
 
     @Override
     public void delete(final Pet obj) {
-        repository.delete(obj);
+        petRepository.delete(obj);
     }
 
     @Override
     public void deleteById(final Long id) {
-        repository.deleteById(id);
+        petRepository.deleteById(id);
     }
 }

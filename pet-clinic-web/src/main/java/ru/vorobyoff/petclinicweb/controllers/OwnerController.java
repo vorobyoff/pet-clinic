@@ -1,5 +1,6 @@
 package ru.vorobyoff.petclinicweb.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,33 +17,66 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/owners/")
-public class OwnerController {
+@RequiredArgsConstructor
+public final class OwnerController {
+
+    private static final String OWNER_DETAILS_VIEW_NAME = "/owners/owner-details";
+    private static final String REDIRECT_TO_OWNER_DETAILS = "redirect:/owners/";
+    private static final String FIND_OWNERS_VIEW_NAME = "owners/find-owners";
+    private static final String OWNER_FORM_VIEW_NAME = "owners/owner-form";
+    private static final String OWNER_LIST_VIEW_NAME = "owners/owner-list";
+
+    static <I extends Number> String getRedirectUrlToOwnerDetails(final I identifier) {
+        return REDIRECT_TO_OWNER_DETAILS + identifier;
+    }
 
     private final OwnerService ownerService;
 
-    public OwnerController(final OwnerService ownerService) {
-        this.ownerService = ownerService;
-    }
-
     @GetMapping("{ownerId}")
     public ModelAndView showOwnerDetailsByOwnerId(@PathVariable final Long ownerId) {
-        final var mav = new ModelAndView("/owners/owner-details");
-        final var owner = ownerService.findById(ownerId).orElseThrow();
-        mav.addObject(owner);
-        return mav;
+        return new ModelAndView(OWNER_DETAILS_VIEW_NAME)
+                .addObject(ownerService.findById(ownerId));
     }
 
     @GetMapping("find")
     public String showFindOwnersPage(final Model model) {
         model.addAttribute("owner", Owner.builder().build());
-        return "owners/find-owners";
+        return FIND_OWNERS_VIEW_NAME;
+    }
+
+    @GetMapping("new")
+    public String showCreateOwnerForm(final Model model) {
+        model.addAttribute("owner", Owner.builder().build());
+        return OWNER_FORM_VIEW_NAME;
+    }
+
+    @PostMapping("new")
+    public String processCreateOwnerForm(@Validated final Owner owner, final BindingResult result) {
+        if (result.hasErrors()) return OWNER_FORM_VIEW_NAME;
+        final var saved = ownerService.save(owner);
+        return getRedirectUrlToOwnerDetails(saved.getId());
+    }
+
+    @GetMapping("/{ownerId}/edit")
+    public String showUpdateOwnerForm(final @PathVariable Long ownerId, final Model model) {
+        final var owner = ownerService.findById(ownerId);
+        model.addAttribute(owner);
+        return OWNER_FORM_VIEW_NAME;
+    }
+
+    @PostMapping("/{ownerId}/edit")
+    public String processUpdateOwnerForm(@Validated final Owner owner, final @PathVariable Long ownerId, final BindingResult result) {
+        if (result.hasErrors()) return OWNER_FORM_VIEW_NAME;
+        owner.setId(ownerId);
+        final var saved = ownerService.save(owner);
+        return getRedirectUrlToOwnerDetails(saved.getId());
     }
 
     @GetMapping
     public String findOwnersByLastName(final Owner owner, final BindingResult result, final Model model) {
         if (owner.getLastName() == null) owner.setLastName("");
 
-        final var foundOwners = ownerService.findAllByLastname(owner.getLastName());
+        final var foundOwners = ownerService.findAllByLastName(owner.getLastName());
 
         var viewName = "";
         if (foundOwners.isEmpty()) {
@@ -56,44 +90,15 @@ public class OwnerController {
 
     private String getViewNameIfOwnersDontExist(final BindingResult result) {
         result.rejectValue("lastName", "notfound", "not found");
-        return "owners/find-owners";
+        return FIND_OWNERS_VIEW_NAME;
     }
 
     private String getViewNameIfOnlyOneOwnerExists(final Owner owner) {
-        return "redirect:/owners/" + owner.getId();
+        return getRedirectUrlToOwnerDetails(owner.getId());
     }
 
     private String getViewNameIfMultipleOwnersExist(final List<Owner> owners, final Model model) {
         model.addAttribute("owners", owners);
-        return "owners/owner-list";
-    }
-
-    @GetMapping("new")
-    public String showCreateOwnerForm(final Model model) {
-        model.addAttribute("owner", Owner.builder().build());
-        return "owners/owner-form";
-    }
-
-    @PostMapping("new")
-    public String processCreateOwnerForm(@Validated final Owner owner, final BindingResult result) {
-        if (result.hasErrors()) return "owners/owner-form";
-        final var saved = ownerService.save(owner);
-        return "redirect:/owners/" + saved.getId();
-    }
-
-    @GetMapping("/{ownerId}/edit")
-    public String showUpdateOwnerForm(final @PathVariable Long ownerId, final Model model) {
-        final var owner = ownerService.findById(ownerId).orElseThrow();
-        model.addAttribute(owner);
-        return "owners/owner-form";
-    }
-
-    @PostMapping("/{ownerId}/edit")
-    public String processUpdateOwnerForm(@Validated final Owner owner, final @PathVariable Long ownerId, final BindingResult result) {
-        if (result.hasErrors()) return "owners/owner-form";
-
-        owner.setId(ownerId);
-        final var saved = ownerService.save(owner);
-        return "redirect:/owners/" + saved.getId();
+        return OWNER_LIST_VIEW_NAME;
     }
 }
