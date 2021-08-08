@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import static java.util.Objects.requireNonNull;
 import static javax.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -41,5 +42,10 @@ public class Pet extends BaseEntity {
         this.type = type;
         this.birthDate = birthDate;
         this.visits = visits == null ? new HashSet<>() : visits;
+    }
+
+    public void addVisit(final Visit visit) {
+        visits.add(requireNonNull(visit));
+        visit.setPet(this);
     }
 }
